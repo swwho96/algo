@@ -16,7 +16,7 @@ sosu = [False, False] + [True for _ in range(max_n*2+1)]
 
 # 테스트 케이스 중 가장 큰 수까지 소수 찾기
 for i in range(2, max_n*2+1):
-    if sosu[i] == True:
+    if sosu[i] is True:
         for j in range(i*2, max_n*2+1, i):
             sosu[j] = False
 
@@ -24,6 +24,6 @@ for i in range(2, max_n*2+1):
 for case in test_cases:
     cnt = 0
     for i in range(case+1, case*2+1):
-        if sosu[i] == True:
-            cnt+=1
+        if sosu[i] is True:
+            cnt += 1
     print(cnt)
