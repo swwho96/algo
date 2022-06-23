@@ -3,7 +3,6 @@ chess_board = []
 start_with_bw = ['BW'*4, 'WB'*4]
 start_with_wb = ['WB'*4, 'BW'*4]
 
-
 # 체스판 입력받기
 for _ in range(row):
     chess_board.append(input())
