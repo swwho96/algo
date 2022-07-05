@@ -1,6 +1,6 @@
 List = list
 class Solution:
-    def maxProfit(prices: List[int]) -> int:
+    def maxProfit(self, prices: List[int]) -> int:
         left, right = 0, 1
         max_profit = 0
         while right < len(prices):
@@ -12,4 +12,5 @@ class Solution:
             right += 1
         return max_profit
 
-print(Solution.maxProfit([2,4,1]))
+solution = Solution()
+print(solution.maxProfit(prices=[2,4,1]))
