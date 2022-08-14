@@ -5,7 +5,7 @@
 
 ---
 
-[알고리즘 내용 정리](https://github.com/swwho96/algo/tree/main/algorithm_organize)
-[백준 문제 풀이](https://github.com/swwho96/algo/tree/main/baekjoon)
-[리트코드 문제 풀이](https://github.com/swwho96/algo/tree/main/leetcode)
+[알고리즘 내용 정리](https://github.com/swwho96/algo/tree/main/algorithm_organize)<br>
+[백준 문제 풀이](https://github.com/swwho96/algo/tree/main/baekjoon)<br>
+[리트코드 문제 풀이](https://github.com/swwho96/algo/tree/main/leetcode)<br>
 [프로그래머스 문제 풀이](https://github.com/swwho96/algo/tree/main/programmers/Level_2)
