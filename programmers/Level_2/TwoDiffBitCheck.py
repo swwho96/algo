@@ -26,6 +26,19 @@ def solution(numbers):
     return answer
 
 
+'''XOR 비트연산자를 활용하는 방법'''
+
+def solution(numbers):
+    answer = []
+    for num in numbers:
+        y = num + 1
+        while True:
+            if bin(num ^ y).count('1') <= 2:
+                answer.append(y)
+                break
+            y += 1
+    return answer
+
 '''x보다 큰 가장 작은 수를 만드는 방법'''
 
 def solution(numbers):
