@@ -1,34 +1,28 @@
-def dfs(graph, v, visited):
-    visited[v] = False
-    print(v, end=' ')
-    for i in graph[v]:
-        if visited[i] is True:
-            dfs(graph, i, visited)
+# 음료수 얼려 먹기 - bfs
+from queue import deque
+N, M = map(int, input().split())
+graph = []
+for _ in range(N):
+    graph.append(list(input()))
 
-def bfs(graph, v, visited):
-    stack = [v]
-    while stack:
-        now = stack.pop(0)
-        print(now, end=' ')
-        visited[now] = False
-        for i in graph[now]:
-            if visited[i] is True:
-                visited[i] = False
-                stack.append(i)
+icecream = 0
 
-graph = [
-    [],
-    [2,3,8],
-    [1,7],
-    [1,4,5],
-    [3,5],
-    [3,4],
-    [7],
-    [2,6,8],
-    [1,7]
-]
-visited = [True for _ in range(len(graph))]
-dfs(graph, 1, visited)
-print()
-visited = [True for _ in range(len(graph))]
-bfs(graph, 1, visited)
+def bfs(graph, x, y):
+    q = deque([(x,y)])
+    while q:
+        x, y = q.popleft()
+        for a, b in zip([-1,1,0,0], [0,0,-1,1]):
+            nx = x + a
+            ny = y + b
+            if 0 <= nx < N and 0 <= ny < M:
+                if graph[nx][ny] == '0':
+                    q.append((nx, ny))
+                    graph[nx][ny] = '#'
+
+for i in range(N):
+    for j in range(M):
+        if graph[i][j] == '0':
+            bfs(graph, i, j)
+            icecream += 1
+
+print(icecream)
