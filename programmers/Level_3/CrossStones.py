@@ -11,7 +11,7 @@ def check(stones, mid, k):
 
 def solution(stones, k):
     left, right = 0, max(stones)
-    while left < right - 1:
+    while left < right:
         mid = (left+right) // 2
         if check(stones, mid, k):
             left = mid
