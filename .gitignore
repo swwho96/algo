@@ -7,6 +7,7 @@
 
 
 ./algorithm_organize/test.py
+/algorithm_organize/test.py
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
