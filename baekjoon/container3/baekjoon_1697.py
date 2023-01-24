@@ -13,5 +13,5 @@ def bfs(v):
                 q.append(i)
 
 n, k = map(int, sys.stdin.readline().split())
-visited = [0 for i in range(100001)]
+visited = [0 for _ in range(100001)]
 print(bfs(n))
