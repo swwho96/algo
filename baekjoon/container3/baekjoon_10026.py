@@ -36,3 +36,44 @@ for i in range(N):
             weakness_result += 1
             
 print(result, weakness_result)
+
+# ------------------------------------------------------------------------
+
+from collections import deque
+import sys
+input = sys.stdin.readline
+N = int(input())
+board = []
+weakness_board = []
+visitied = [[0] * N for _ in range(N)]
+weakness_visitied = [[0] * N for _ in range(N)]
+for _ in range(N):
+    tmp = input().rstrip()
+    board.append(list(tmp))
+    weakness_board.append(list(tmp.replace('G', 'R')))
+
+def bfs(x, y, b, v):
+    n = len(b)
+    c = b[x][y]
+    q = deque([(x,y)])
+    while q:
+        x, y = q.popleft()
+        for xi, yi in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nx = x+xi
+            ny = y+yi
+            if 0<=nx<n and 0<=ny<n and not v[nx][ny] and b[nx][ny] == c:
+                v[nx][ny] = 1
+                q.append((nx, ny))
+    return b, v
+
+result, weakness_result = 0, 0
+for i in range(N):
+    for j in range(N):
+        if not visitied[i][j]:
+            board, visitied = bfs(i,j,board, visitied)
+            result += 1
+        if not weakness_visitied[i][j]:
+            weakness_board, weakness_visitied = bfs(i,j,weakness_board, weakness_visitied)
+            weakness_result += 1
+            
+print(result, weakness_result)
