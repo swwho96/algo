@@ -9,18 +9,22 @@ while True:
         break
 
 def post_order(start, end):
-    if start > end:
-        return
     root = pre_order[start]
     idx = start+1
 
-    while idx <= end:
-        if pre_order[idx] > root:
-            break
-        idx += 1
+    if start >= end:
+        print(root)
+        return
 
-    post_order(start+1, idx-1)
-    post_order(idx, end)
+    if pre_order[start] < pre_order[start+1] or pre_order[start] > pre_order[end]:
+        post_order(start+1, end)
+    else:
+        while idx <= end:
+            if pre_order[idx] > root:
+                break
+            idx += 1
+        post_order(start+1, idx-1)
+        post_order(idx, end)
     print(root)
 
 post_order(0, len(pre_order)-1)
