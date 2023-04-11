@@ -15,4 +15,4 @@ else:
             max_tax = mid - 1
         else:
             min_tax = mid + 1
-    print(min(max(needs), max_tax))
+    print(max_tax)
