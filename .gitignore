@@ -5,7 +5,6 @@
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
 
-test.py
 ./algorithm_organize/test.py
 /algorithm_organize/test.py
 .ipynb_checkpoints
