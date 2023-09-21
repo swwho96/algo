@@ -26,7 +26,7 @@ def solution(line):
     grid = [['.'] * col for _ in range(row)]
     for point in points:
         x, y = point
-        x = x + abs(left) if left < 0 else x - left
-        y = y + abs(up) if up < 0 else y - up
+        x = x - left
+        y = down - y
         grid[y][x] = '*'
-    return [''.join(g) for g in grid[::-1]]
+    return [''.join(g) for g in grid]
