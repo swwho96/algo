@@ -27,3 +27,32 @@ def solution(places):
                 break
         answer.append(flag)
     return answer
+
+# --------------------------------------------------------------------------------------------------------
+
+def solution(places):
+    answer = []
+    
+    def dfs(room, row, col, dist):
+        nonlocal flag
+        if dist == 2:
+            return 
+        visited[row][col] = True
+        for dx, dy in [(-1,0), (1,0), (0,-1), (0,1)]:
+            nrow, ncol = row + dx, col + dy
+            if 0 <= nrow < 5 and 0 <= ncol < 5:
+                if room[nrow][ncol] == 'P' and visited[nrow][ncol] is False:
+                    flag = 0
+                    return
+                if room[nrow][ncol] == 'O' and visited[nrow][ncol] is False:
+                    dfs(room, nrow, ncol, dist + 1)
+                    
+    for place in places:
+        flag = 1
+        visited = [[False] * 5 for _ in range(5)]
+        for r in range(5):
+            for c in range(5):
+                if place[r][c] == 'P':
+                    dfs(place, r, c, 0)
+        answer.append(flag)
+    return answer
