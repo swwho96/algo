@@ -27,3 +27,38 @@ def solution(expression):
                 temp = temp[:idx-1] + [str(eval(''.join(temp[idx-1:idx+2])))] + temp[idx+2:]
         answer.append(abs(int(temp[0])))
     return max(answer)
+
+
+# --------------------------------------------------------------------------------------
+
+from itertools import permutations
+import re
+
+def solution(expression):
+    tokens = re.split(r'([-+*/()])|\s+', expression)
+    operators = ['+', '-', '*']
+    answer = 0
+
+    for i in map(list, permutations(operators)):
+        priority = {o:p for p, o in enumerate(list(i))}
+
+
+    def toPostFix(tokens, priorty):
+        stack = []
+        postfix = []
+        for token in tokens:
+            if token.isdigit():
+                postfix.append(token)
+            else:
+                if not stack:
+                    stack.append(token)
+                else:
+                    while stack:
+                        if priority[token] <= priority[stack[-1]]:
+                            postfix.append(stack.pop())
+                        else:
+                            break
+                    stack.append(token)
+        while stack:
+            postfix.append(stack.pop())
+        return postfix
