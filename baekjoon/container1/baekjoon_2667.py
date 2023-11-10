@@ -1,31 +1,28 @@
 import sys
+input = sys.stdin.readline
+N = int(input())
+village = []
+for _ in range(N):
+    village.append(list(map(int, input().rstrip())))
 
-N = int(sys.stdin.readline().rstrip())
-graph = []
-for i in range(N):
-    graph.append(list(map(int, sys.stdin.readline().rstrip())))
+result = []
 
-visited = [[False for _ in range(N)] for _ in range(N)]
-houses = []
+def bfs(x, y):
+    global home_cnt, village, result
+    village[x][y] = -1
+    home_cnt += 1
+    for i, j in [(-1,0),(1,0),(0,-1),(0,1)]:
+        if 0<=x+i<N and 0<=y+j<N and village[x+i][y+j] == 1:
+            bfs(x+i, y+j)
+
 for i in range(N):
     for j in range(N):
-        if graph[i][j] == 1:
-            stack = [(i, j)]
+        if village[i][j] == 1:
             home_cnt = 0
-            while stack:
-                x, y = stack.pop()
-                graph[x][y] = 9
-                if visited[x][y] is False:
-                    home_cnt += 1
-                    visited[x][y] = True
-                    for dx, dy in zip([-1, 1, 0, 0], [0, 0, -1, 1]):
-                        nx = x + dx
-                        ny = y + dy
-                        if 0 <= nx < N and 0 <= ny < N and graph[nx][ny] == 1:
-                            if visited[nx][ny] is False:
-                                stack.append((nx, ny))
-            houses.append(home_cnt)
+            bfs(i,j)
+            result.append(home_cnt)
 
-print(len(houses))
-for i in sorted(houses):
-    print(i)
+print(len(result))
+result.sort()
+for r in result:
+    print(r)
