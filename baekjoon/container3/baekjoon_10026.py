@@ -77,3 +77,41 @@ for i in range(N):
             weakness_result += 1
             
 print(result, weakness_result)
+
+
+# --------------------------------------------------------------------
+import sys
+input = sys.stdin.readline
+N = int(input())
+board1 = []
+board2 = []
+for _ in range(N):
+    tmp = input().rstrip()
+    board1.append(list(tmp))
+    board2.append(list(tmp.replace('R','A').replace('G','A')))
+
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+
+def dfs(x,y,b,color):
+    b[x][y] = '#'
+    stack = [(x,y)]
+    while stack:
+        r, c = stack.pop()
+        for i in range(4):
+            nr, nc = r+dx[i], c+dy[i]
+            if 0<=nr<N and 0<=nc<N and b[nr][nc] == color:
+                b[nr][nc] = '#'
+                stack.append((nr,nc))
+
+cnt1, cnt2 = 0, 0
+for i in range(N):
+    for j in range(N):
+        if board1[i][j] != '#':
+            dfs(i,j,board1,board1[i][j])
+            cnt1 += 1
+        if board2[i][j] != '#':
+            dfs(i,j,board2,board2[i][j])
+            cnt2 += 1
+
+print(cnt1, cnt2)
