@@ -1,34 +1,18 @@
-# import sys
-# input = sys.stdin.readline
-
-# N = int(input())
-# A = set(map(int,input().split()))
-# M = int(input())
-# numbers = list(map(int, input().split()))
-# for n in numbers:
-#     if n in A:
-#         print(1)
-#     else:
-#         print(0)
-
 import sys
 input = sys.stdin.readline
 
-N = int(input())
-A = list(map(int,input().split()))
-A.sort()
-M = int(input())
-numbers = list(map(int, input().split()))
-for n in numbers:
-    left, right = 0, len(A)-1
-    flag = False
-    while left <= right:
-        mid = (left+right) // 2
-        if A[mid] == n:
-            flag = True
-            break
-        elif mid > n:
-            right = mid-1
-        else:
-            left = mid+1
-    print(1) if flag is True else print(0)
+M, N = map(int, input().split())
+
+primenumber = [False,False] + ([True] * N) 
+for i in range(M, N+1):
+    if primenumber[i] is True:
+        isPrime = True
+        # 소수 확인
+        for n in range(2, int(i**0.5)+1):
+            if i % n == 0:
+                isPrime = False
+                break
+        if isPrime is True: print(i)
+        # 소수의 배수는 소수에서 제외
+        for j in range(i*2, len(primenumber), i):
+            primenumber[j] = False
