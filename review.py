@@ -1,33 +1,30 @@
 import sys
-from collections import deque
+import heapq
 input = sys.stdin.readline
-N = int(input())
-graph = [[] for _ in range(N+1)]
-indgree = [0] * (N+1)
-costs = [0] * (N+1)
+V, E = map(int, input().split())
+K = int(input())
+INF = int(10e9)
+graph = [[] for _ in range(V+1)]
+visited = [False] * (V+1)
+dist_from_k = [INF] * (V+1)
 
-for i in range(1,N+1):
-    building_info = list(map(int, input().split()))
-    costs[i] = building_info[0]
-    for b_num in building_info[1:-1]:
-        graph[b_num].append(i)
-        indgree[i] += 1
+for i in range(1, E+1):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
 
-q = deque()
-
-for i in range(1, N+1):
-    if indgree[i] == 0:
-        q.append(i)
-
-result = [0] * (N+1)
+q = []
+heapq.heappush(q, (0, K))
+dist_from_k[K] = 0
 
 while q:
-    now = q.popleft()
-    for i in graph[now]:
-        indgree[i] -= 1
-        result[i] = max(result[i], result[now]+costs[now])
-        if indgree[i] == 0:
-            q.append(i)
+    cost, now = heapq.heappop(q)
+    if visited[now] is False:
+        visited[now] = True
+        for i in graph[now]:
+            nnow, ncost = i
+            if dist_from_k[nnow] > dist_from_k[now] + ncost:
+                dist_from_k[nnow] = dist_from_k[now] + ncost
+                heapq.heappush(q, (dist_from_k[nnow], nnow))
 
-for i in range(1, N+1):
-    print(result[i]+costs[i])
+for i in range(1, V+1):
+    print(dist_from_k[i] if dist_from_k[i] < INF else "INF")
