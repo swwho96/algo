@@ -1,18 +1,21 @@
 import sys
 input = sys.stdin.readline
+n, m = map(int, input().split())
+parent = [i for i in range(n+1)]
 
-M, N = map(int, input().split())
+def find(x):
+    if x != parent[x]:
+        parent[x] = find(parent[x])
+    return parent[x]
 
-primenumber = [False,False] + ([True] * N) 
-for i in range(M, N+1):
-    if primenumber[i] is True:
-        isPrime = True
-        # 소수 확인
-        for n in range(2, int(i**0.5)+1):
-            if i % n == 0:
-                isPrime = False
-                break
-        if isPrime is True: print(i)
-        # 소수의 배수는 소수에서 제외
-        for j in range(i*2, len(primenumber), i):
-            primenumber[j] = False
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    parent[max(a,b)] = min(a,b)
+
+for _ in range(m):
+    q, x, y = map(int, input().split())
+    if q == 0:
+        union(x, y)
+    elif q == 1:
+        print('NO') if find(x) != find(y) else print('YES')
