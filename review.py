@@ -1,21 +1,33 @@
 import sys
+from collections import deque
 input = sys.stdin.readline
-n, m = map(int, input().split())
-parent = [i for i in range(n+1)]
+N = int(input())
+graph = [[] for _ in range(N+1)]
+indgree = [0] * (N+1)
+costs = [0] * (N+1)
 
-def find(x):
-    if x != parent[x]:
-        parent[x] = find(parent[x])
-    return parent[x]
+for i in range(1,N+1):
+    building_info = list(map(int, input().split()))
+    costs[i] = building_info[0]
+    for b_num in building_info[1:-1]:
+        graph[b_num].append(i)
+        indgree[i] += 1
 
-def union(a, b):
-    a = find(a)
-    b = find(b)
-    parent[max(a,b)] = min(a,b)
+q = deque()
 
-for _ in range(m):
-    q, x, y = map(int, input().split())
-    if q == 0:
-        union(x, y)
-    elif q == 1:
-        print('NO') if find(x) != find(y) else print('YES')
+for i in range(1, N+1):
+    if indgree[i] == 0:
+        q.append(i)
+
+result = [0] * (N+1)
+
+while q:
+    now = q.popleft()
+    for i in graph[now]:
+        indgree[i] -= 1
+        result[i] = max(result[i], result[now]+costs[now])
+        if indgree[i] == 0:
+            q.append(i)
+
+for i in range(1, N+1):
+    print(result[i]+costs[i])
