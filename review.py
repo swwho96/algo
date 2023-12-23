@@ -1,28 +1,27 @@
 import sys
-from collections import deque
+import heapq
 input = sys.stdin.readline
+V, E = map(int, input().split())
+K = int(input())
+INF = int(10e9)
+dist = [INF] * (V+1)
+visited = [False] * (V+1)
+graph = [[] for _ in range(V+1)]
+for _ in range(E):
+    u,v,w = map(int, input().split())
+    graph[u].append((v,w))
 
-N, M = map(int, input().split())
-graph = [[] for _ in range(N+1)]
-indgree = [0] * (N+1)
-
-for _ in range(M):
-    a, b = map(int, input().split())
-    graph[a].append(b)
-    indgree[b] += 1
-
-q = deque()
-for i in range(1, N+1):
-    if indgree[i] == 0:
-        q.append(i)
-    
-result = []
+q = [(0, K)]
+dist[K] = 0
 while q:
-    now = q.popleft()
-    result.append(str(now))
-    for i in graph[now]:
-        indgree[i] -= 1
-        if indgree[i] == 0:
-            q.append(i)
+    cost, now = heapq.heappop(q)
+    if visited[now] is False:
+        visited[now] = True
+        for i in graph[now]:
+            nnow, ncost = i
+            if dist[nnow] > dist[now] + ncost:
+                dist[nnow] = dist[now] + ncost
+                heapq.heappush(q, (dist[nnow], nnow))
 
-print(' '.join(result))
+for i in range(1, V+1):
+    print(dist[i] if dist[i] < INF else "INF")
