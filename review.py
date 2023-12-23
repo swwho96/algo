@@ -1,18 +1,24 @@
 import sys
 import heapq
 input = sys.stdin.readline
-V, E = map(int, input().split())
-K = int(input())
-INF = int(10e9)
-dist = [INF] * (V+1)
-visited = [False] * (V+1)
-graph = [[] for _ in range(V+1)]
-for _ in range(E):
-    u,v,w = map(int, input().split())
-    graph[u].append((v,w))
 
-q = [(0, K)]
-dist[K] = 0
+N = int(input())
+M = int(input())
+
+graph = [[] for _ in range(N+1)]
+visited = [False] * (N+1)
+for _ in range(M):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
+
+start, end = map(int, input().split())
+
+INF = int(10e9)
+dist = [INF] * (N+1)
+
+q = [(0, start)]
+dist[start] = 0
+
 while q:
     cost, now = heapq.heappop(q)
     if visited[now] is False:
@@ -23,5 +29,4 @@ while q:
                 dist[nnow] = dist[now] + ncost
                 heapq.heappush(q, (dist[nnow], nnow))
 
-for i in range(1, V+1):
-    print(dist[i] if dist[i] < INF else "INF")
+print(dist[end])
