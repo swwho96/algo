@@ -2,31 +2,29 @@ import sys
 import heapq
 input = sys.stdin.readline
 
-N = int(input())
-M = int(input())
+V, E = map(int, input().split())
 
-graph = [[] for _ in range(N+1)]
-visited = [False] * (N+1)
-for _ in range(M):
-    u, v, w = map(int, input().split())
-    graph[u].append((v, w))
-
-start, end = map(int, input().split())
+edges = []
+for _ in range(E):
+    edges.append(list(map(int, input().split())))
 
 INF = int(10e9)
-dist = [INF] * (N+1)
+distance = [INF] * (V+1)
+distance[1] = 0
 
-q = [(0, start)]
-dist[start] = 0
+for _ in range(V-1):
+    for s, e, t in edges:
+        if distance[s] != INF and distance[e] > distance[s] + t:
+            distance[e] = distance[s] + t
 
-while q:
-    cost, now = heapq.heappop(q)
-    if visited[now] is False:
-        visited[now] = True
-        for i in graph[now]:
-            nnow, ncost = i
-            if dist[nnow] > dist[now] + ncost:
-                dist[nnow] = dist[now] + ncost
-                heapq.heappush(q, (dist[nnow], nnow))
+cycle = False
+for s, e, t in edges:
+    if distance[s] != INF and distance[e] > distance[s] + t:
+        cycle = True
+        break
 
-print(dist[end])
+if cycle is False:
+    for i in range(2, V+1):
+        print(distance[i] if distance[i] != INF else -1)
+else:
+    print(-1) 
