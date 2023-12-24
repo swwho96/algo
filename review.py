@@ -1,30 +1,26 @@
 import sys
-import heapq
 input = sys.stdin.readline
 
-V, E = map(int, input().split())
-
-edges = []
-for _ in range(E):
-    edges.append(list(map(int, input().split())))
-
+N = int(input())
+M = int(input())
 INF = int(10e9)
-distance = [INF] * (V+1)
-distance[1] = 0
+graph = [[INF]*(N+1) for _ in range(N+1)]
+for _ in range(M):
+    a, b, c = map(int, input().split())
+    graph[a][b] = min(graph[a][b], c)
 
-for _ in range(V-1):
-    for s, e, t in edges:
-        if distance[s] != INF and distance[e] > distance[s] + t:
-            distance[e] = distance[s] + t
+for i in range(1,N+1):
+    graph[i][i] = 0
 
-cycle = False
-for s, e, t in edges:
-    if distance[s] != INF and distance[e] > distance[s] + t:
-        cycle = True
-        break
+for k in range(1, N+1):
+    for i in range(1, N+1):
+        for j in range(1, N+1):
+            graph[i][j] = min(graph[i][j], graph[i][k]+graph[k][j])
 
-if cycle is False:
-    for i in range(2, V+1):
-        print(distance[i] if distance[i] != INF else -1)
-else:
-    print(-1) 
+for i in range(1, N+1):
+    for j in range(1, N+1):
+        if graph[i][j] == INF:
+            print(0, end=' ')
+        else:
+            print(graph[i][j], end=' ')
+    print()
