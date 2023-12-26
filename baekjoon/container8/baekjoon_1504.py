@@ -11,7 +11,7 @@ for _ in range(E):
 
 V1, V2 = map(int, input().split())
 
-def dijakstra(start, arrive):
+def dijakstra(start):
     INF = int(10e9)
     distance = [INF] * (N+1)
     distance[start] = 0
@@ -20,10 +20,13 @@ def dijakstra(start, arrive):
         cost, now = heapq.heappop(q)
         for i in graph[now]:
             nnow, ncost = i
+            if distance[now] < cost:
+                continue
             if distance[nnow] > distance[now] + ncost:
                 distance[nnow] = distance[now] + ncost
                 heapq.heappush(q, (distance[nnow], nnow))
-    return distance[arrive]
+    return distance
 
-result = min(dijakstra(1, V1) + dijakstra(V1, V2) + dijakstra(V2, N), dijakstra(1, V2) + dijakstra(V2, V1) + dijakstra(V1, N))
+start_from_1, start_from_v1, start_from_v2 = dijakstra(1), dijakstra(V1), dijakstra(V2)
+result = min(start_from_1[V1]+start_from_v1[V2]+start_from_v2[N], start_from_1[V2]+start_from_v2[V1]+start_from_v1[N])
 print(result if result < int(10e9) else -1)
