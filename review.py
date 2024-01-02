@@ -1,30 +1,29 @@
 '''
-주어진 수들 중에서 두개를 골라 더한 값이 수들 안에 있으면 좋은수
-정렬 후, 앞에서부터 투 포인터로 더해가면서 check에 있는지 확인
+문자열을 주어진 크기만큼 확인하면서, 각 알파벳별 개수를 만족하면 개수를 세어 더한다
 '''
+
 import sys
 input = sys.stdin.readline
-N = int(input())
-A = list(map(int, input().split()))
-A.sort()
-check = set(A)
+S, T = map(int, input().split())
+string = input().rstrip()
+minimum_cnt = list(map(int, input().split())) # [A, C, G, T]
+minimum_dict = {k:v for k, v in zip(['A', 'C', 'G', 'T'], minimum_cnt)}
+left, right = 0, 0
 
 result = 0
-for i in range(N):
-    target = A[i]
-    left, right = 0, N-1
-    while left < right:
-        tmp = A[left] + A[right]
-        if tmp > target:
-            right -= 1
-        elif tmp < target:
-            left += 1
-        elif tmp == target:
-            if left != i and right != i:
-                result += 1
-                break
-            elif left == i:
-                left += 1
-            elif right == i:
-                right -= 1
+window = {'A':0, 'C':0, 'G':0, 'T':0}
+window[string[left]] += 1
+while right < S:
+    if right-left+1 == T:
+        if window['A'] >= minimum_dict['A'] and window['C'] >= minimum_dict['C'] and window['G'] >= minimum_dict['G'] and window['T'] >= minimum_dict['T']:
+            result += 1
+        window[string[left]] -= 1
+        left += 1
+        if right == S-1:
+            break
+        right += 1
+        window[string[right]] += 1
+    else:
+        right += 1
+        window[string[right]] += 1
 print(result)
