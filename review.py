@@ -1,55 +1,30 @@
 '''
-두 재료를 합쳐 M이 되는 경우를 찾는 문제
-합이 M이 되는 조합을 찾고, 각 재료의 개수에 따른 경우의 수를 구하여 결과에 더한다
+주어진 수들 중에서 두개를 골라 더한 값이 수들 안에 있으면 좋은수
+정렬 후, 앞에서부터 투 포인터로 더해가면서 check에 있는지 확인
 '''
-
 import sys
 input = sys.stdin.readline
 N = int(input())
-M = int(input())
-materials = list(map(int, input().split()))
-
-cnt = {}
-for m in materials:
-    cnt[m] = cnt[m] + 1 if m in cnt else 1
+A = list(map(int, input().split()))
+A.sort()
+check = set(A)
 
 result = 0
-while cnt:
-    a = list(cnt.keys())[0]
-    b = M - a
-    if a == b:
-        if cnt[a] == 1:
-            del cnt[a]
-        else:
-            result += ((cnt[a] * cnt[a]) // 2)
-            del cnt[a]
-    elif b in cnt:
-        result += (cnt[a] * cnt[b])
-        del cnt[a]
-        del cnt[b]
-    else:
-        del cnt[a]
-
-print(result)
-
-# -----------------------------------------------------
-import sys
-input = sys.stdin.readline
-N = int(input())
-M = int(input())
-materials = list(map(int, input().split()))
-materials.sort()
-left, right = 0, N-1
-
-result = 0
-while left < right:
-    tmp = materials[left] + materials[right]
-    if tmp == M:
-        result += 1
-        left, right = left+1, right-1
-    elif tmp > M:
-        right -= 1
-    else:
-        left += 1
-
+for i in range(N):
+    target = A[i]
+    left, right = 0, N-1
+    while left < right:
+        tmp = A[left] + A[right]
+        if tmp > target:
+            right -= 1
+        elif tmp < target:
+            left += 1
+        elif tmp == target:
+            if left != i and right != i:
+                result += 1
+                break
+            elif left == i:
+                left += 1
+            elif right == i:
+                right -= 1
 print(result)
