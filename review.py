@@ -1,29 +1,31 @@
-'''
-문자열을 주어진 크기만큼 확인하면서, 각 알파벳별 개수를 만족하면 개수를 세어 더한다
+''''
+1부터 N까지 숫자를 하나씩 스택에 담거나 빼면서, 주어진 수열을 만든다
 '''
 
 import sys
+from collections import deque
 input = sys.stdin.readline
-S, T = map(int, input().split())
-string = input().rstrip()
-minimum_cnt = list(map(int, input().split())) # [A, C, G, T]
-minimum_dict = {k:v for k, v in zip(['A', 'C', 'G', 'T'], minimum_cnt)}
-left, right = 0, 0
 
-result = 0
-window = {'A':0, 'C':0, 'G':0, 'T':0}
-window[string[left]] += 1
-while right < S:
-    if right-left+1 == T:
-        if window['A'] >= minimum_dict['A'] and window['C'] >= minimum_dict['C'] and window['G'] >= minimum_dict['G'] and window['T'] >= minimum_dict['T']:
-            result += 1
-        window[string[left]] -= 1
-        left += 1
-        if right == S-1:
-            break
-        right += 1
-        window[string[right]] += 1
+N = int(input())
+A = deque([])
+for _ in range(N):
+    A.append(int(input()))
+
+q = deque([])
+answer = []
+i = 1
+while A:
+    if q and A[0] == q[-1]:
+        answer.append('-')
+        q.pop()
+        A.popleft()
+    elif q and q[-1] > A[0]:
+        answer = ['NO']
+        break
     else:
-        right += 1
-        window[string[right]] += 1
-print(result)
+        q.append(i)
+        i += 1
+        answer.append('+')
+
+for a in answer:
+    print(a)
