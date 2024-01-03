@@ -1,19 +1,18 @@
-'''
-수열의 각 원소에 대해, 가장 가까운 자신보다 큰 수를 찾아 출력한다
-
-'''
-
 import sys
 input = sys.stdin.readline
 
+'''
+큐에서 첫 숫자는 버리고, 그 다음 숫자를 제일 끝에 넣는다
+'''
+from collections import deque
 N = int(input())
-A = list(map(int, input().split()))
-q = []
-answer = [-1] * N
-for i in range(N):
-    while q and A[q[-1]] < A[i]:
-        tmp = q.pop()
-        answer[tmp] = A[i]
-    q.append(i)
 
-print(' '.join(map(str, answer)))
+cards = deque([i for i in range(1, N+1)])
+trash = 0
+while True:
+    trash = cards.popleft()
+    if cards:
+        cards.append(cards.popleft())
+    else:
+        break
+print(trash)
