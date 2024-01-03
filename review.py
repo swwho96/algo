@@ -10,10 +10,10 @@ N = int(input())
 A = list(map(int, input().split()))
 q = []
 answer = [-1] * N
-for i, num in enumerate(A):
-    while q and q[-1][1] < num:
-        a, b = q.pop()
-        answer[a] = num
-    q.append([i, num])
+for i in range(N):
+    while q and A[q[-1]] < A[i]:
+        tmp = q.pop()
+        answer[tmp] = A[i]
+    q.append(i)
 
 print(' '.join(map(str, answer)))
