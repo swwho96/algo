@@ -1,18 +1,20 @@
+'''
+정렬 전후 index값의 차이의 최대값은 swap의 횟수와 같다
+'''
+
 import sys
 input = sys.stdin.readline
 
-'''
-큐에서 첫 숫자는 버리고, 그 다음 숫자를 제일 끝에 넣는다
-'''
-from collections import deque
 N = int(input())
+A = []
+for i in range(N):
+    A.append((int(input()), i))
+A.sort()
 
-cards = deque([i for i in range(1, N+1)])
-trash = 0
-while True:
-    trash = cards.popleft()
-    if cards:
-        cards.append(cards.popleft())
-    else:
-        break
-print(trash)
+answer = 0
+for idx, a in enumerate(A):
+    num, i = a
+    if (i-idx) > answer:
+        answer = i-idx
+
+print(answer+1)
