@@ -2,28 +2,22 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-graph = [[] for _ in range(N+1)]
-for _ in range(M):
-    a, b = map(int, input().split())
-    graph[a].append(b)
-    graph[b].append(a)
+N = int(input())
+answer = []
 
-visited = [False] * (N+1)
-def bfs(start):
-    q = deque([start])
-    visited[start] = True
-    while q:
-        now = q.popleft()
-        for i in graph[now]:
-            if visited[i] is False:
-                q.append(i)
-                visited[i] = True
+# 소수 구하기
+def is_Prime(n):
+    for i in range(2, int(n**0.5)+1):
+        if n % i == 0:
+            return False
+    return True
 
-cnt = 0
-for i in range(1, N+1):
-    if visited[i] is False:
-        bfs(i)
-        cnt += 1
-
-print(cnt)
+for n in range(10**(N-1), 10**(N)):
+    str_n = str(n)
+    flag = True
+    for idx in range(N):
+        if is_Prime(int(str_n[:idx+1])) is False:
+            flag = False
+            break
+    if flag is True:
+        print(n)
