@@ -1,19 +1,17 @@
+import heapq
 import sys
 input = sys.stdin.readline
+
 N = int(input())
-K = int(input())
+cards = []
+for _ in range(N):
+    cards.append(int(input()))
 
-start, end = 1, K
-while start <= end:
-    mid = (start+end) // 2
-    tmp =  0
-    for i in range(1, N+1):
-        tmp += min(mid//i, N)
-
-    if tmp >= K:
-        answer = mid
-        end = mid - 1
-    else:
-        start = mid + 1
+heapq.heapify(cards)
+answer = 0
+while len(cards) > 1:
+    a, b = heapq.heappop(cards), heapq.heappop(cards)
+    answer += a + b
+    heapq.heappush(cards, a+b)
 
 print(answer)
