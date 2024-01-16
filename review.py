@@ -1,7 +1,12 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(100000)
-N,M = map(int, input().split())
+
+N = int(input())
+M = int(input())
+board = []
+for _ in range(N):
+    board.append(list(map(int, input().split())))
+roots = list(map(int, input().split()))
 
 def find(x, parent):
     if x != parent[x]:
@@ -13,10 +18,13 @@ def union(a, b, parent):
     b = find(b, parent)
     parent[max(a,b)] = min(a,b)
 
-parent = [i for i in range(N+1)]
-for _ in range(M):
-    op, a, b = map(int, input().split())
-    if op == 1:
-        print('YES' if find(a, parent) == find(b, parent) else 'NO')
-    else:
-        union(a, b, parent)
+parent = [i for i in range(N)]
+for i in range(N):
+    for j in range(N):
+        if board[i][j] == 1:
+            union(i, j, parent)
+
+flag = set()
+for r in roots:
+    flag.add(parent[r-1])
+print('YES' if len(flag) == 1 else 'NO')
