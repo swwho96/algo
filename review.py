@@ -1,13 +1,6 @@
 import sys
 input = sys.stdin.readline
 
-N = int(input())
-M = int(input())
-board = []
-for _ in range(N):
-    board.append(list(map(int, input().split())))
-roots = list(map(int, input().split()))
-
 def find(x, parent):
     if x != parent[x]:
         parent[x] = find(parent[x], parent)
@@ -18,13 +11,26 @@ def union(a, b, parent):
     b = find(b, parent)
     parent[max(a,b)] = min(a,b)
 
-parent = [i for i in range(N)]
-for i in range(N):
-    for j in range(N):
-        if board[i][j] == 1:
-            union(i, j, parent)
+N, M = map(int, input().split())
+parent = [i for i in range(N+1)]
 
-flag = set()
-for r in roots:
-    flag.add(parent[r-1])
-print('YES' if len(flag) == 1 else 'NO')
+truths = list(map(int, input().split()))[1:]
+for t in truths:
+    parent[t] = 0
+
+# 진실을 아는 집합
+parties = []
+for _ in range(M):
+    tmp = list(map(int, input().split()))[1:]
+    parties.append(tmp)
+    for i in range(len(tmp)-1):
+        union(tmp[i], tmp[i+1], parent)
+
+# 과장할 수 있는 파티 구하기
+cnt = len(parties)
+for p in parties:
+    for person in p:
+        if find(person, parent) == 0:
+            cnt -= 1
+            break
+print(cnt)
