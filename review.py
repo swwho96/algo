@@ -1,36 +1,33 @@
 import sys
 input = sys.stdin.readline
 
-def find(x, parent):
-    if x != parent[x]:
-        parent[x] = find(parent[x], parent)
-    return parent[x]
-
-def union(a, b, parent):
-    a = find(a, parent)
-    b = find(b, parent)
-    parent[max(a,b)] = min(a,b)
-
 N, M = map(int, input().split())
-parent = [i for i in range(N+1)]
-
-truths = list(map(int, input().split()))[1:]
-for t in truths:
-    parent[t] = 0
-
-# 진실을 아는 집합
-parties = []
+graph = [[] for _ in range(N+1)]
+indegree = [0] * (N+1)
 for _ in range(M):
-    tmp = list(map(int, input().split()))[1:]
-    parties.append(tmp)
-    for i in range(len(tmp)-1):
-        union(tmp[i], tmp[i+1], parent)
+    a, b = map(int, input().split()) # A < B
+    graph[a].append(b)
+    indegree[b] += 1
 
-# 과장할 수 있는 파티 구하기
-cnt = len(parties)
-for p in parties:
-    for person in p:
-        if find(person, parent) == 0:
-            cnt -= 1
-            break
-print(cnt)
+# 진입차수 0인 학생 찾기
+visited = [False] * (N+1)
+stack = []
+for i in range(1, N+1):
+    if indegree[i] == 0:
+        visited[i] = True
+        stack.append(i)
+
+def topology_sort(stack:list)->list:
+    order = []
+    while stack:
+        now = stack.pop()
+        order.append(str(now))
+        for i in graph[now]:
+            indegree[i] -= 1
+            if indegree[i] == 0 and visited[i] is False:
+                visited[i] = True
+                stack.append(i)
+    return order
+
+result = topology_sort(stack)
+print(' '.join(result))
