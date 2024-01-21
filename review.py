@@ -1,30 +1,29 @@
+from heapq import heappush, heappop
 import sys
 input = sys.stdin.readline
 
-INF = int(1e9)
+def find(x, parent):
+    if x != parent[x]:
+        parent[x] = find(parent[x], parent)
+    return parent[x]
 
-v, start, end, e = map(int, input().split())
-edges = []
+def union(a, b, parent):
+    a = find(a, parent)
+    b = find(b, parent)
+    parent[max(a,b)] = min(a,b)
 
-distance = [-INF] * (v + 1)
+V, E = map(int, input().split())
+parent = [i for i in range(V+1)]
+heap = []
+for _ in range(E):
+    a, b, c = map(int, input().split())
+    heappush(heap, (c, a, b))
 
-for _ in range(e):
-    sv, ev, cost = map(int, input().split())
-    edges.append((sv, ev, -cost))
+total_cost = 0
+while heap:
+    cost, s, e = heappop(heap)
+    if find(s, parent) != find(e, parent):
+        union(s, e, parent)
+        total_cost += cost
 
-money = list(map(int, input().split()))
-
-def bellmanFord(start):
-    distance[start] = money[start]
-    for i in range(v+120):
-        for j in range(e):
-            curNode, nextNode, edgeCost = edges[j]
-            if distance[curNode] != -INF and distance[curNode] + edgeCost + money[nextNode] > distance[nextNode]:
-                distance[nextNode] = distance[curNode] + edgeCost + money[nextNode]
-                if i >= v - 1:
-                    distance[nextNode] = INF
-
-bellmanFord(start)
-if distance[end] == -INF: print("gg")
-elif distance[end] == INF: print("Gee")
-else: print(distance[end])
+print(total_cost)
