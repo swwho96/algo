@@ -1,29 +1,27 @@
-from heapq import heappush, heappop
+from collections import deque
 import sys
 input = sys.stdin.readline
 
-def find(x, parent):
-    if x != parent[x]:
-        parent[x] = find(parent[x], parent)
-    return parent[x]
+N = int(input())
+graph = [[] for _ in range(N+1)]
+for _ in range(N-1):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
 
-def union(a, b, parent):
-    a = find(a, parent)
-    b = find(b, parent)
-    parent[max(a,b)] = min(a,b)
+visited = [False] * (N+1)
+result = [0] * (N+1)
+def bfs(start):
+    q = deque([start])
+    visited[start] = True
+    while q:
+        now = q.popleft()
+        for i in graph[now]:
+            if visited[i] is False:
+                result[i] = now
+                q.append(i)
+                visited[i] = True
 
-V, E = map(int, input().split())
-parent = [i for i in range(V+1)]
-heap = []
-for _ in range(E):
-    a, b, c = map(int, input().split())
-    heappush(heap, (c, a, b))
-
-total_cost = 0
-while heap:
-    cost, s, e = heappop(heap)
-    if find(s, parent) != find(e, parent):
-        union(s, e, parent)
-        total_cost += cost
-
-print(total_cost)
+bfs(1)
+for i in range(2, N+1):
+    print(result[i])
