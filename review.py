@@ -1,27 +1,36 @@
-from collections import deque
 import sys
 input = sys.stdin.readline
 
 N = int(input())
-graph = [[] for _ in range(N+1)]
-for _ in range(N-1):
-    a, b = map(int, input().split())
-    graph[a].append(b)
-    graph[b].append(a)
+tree = {}
+for _ in range(N):
+    n, l, r = input().split()
+    tree[n] = [l,r]
 
-visited = [False] * (N+1)
-result = [0] * (N+1)
-def bfs(start):
-    q = deque([start])
-    visited[start] = True
-    while q:
-        now = q.popleft()
-        for i in graph[now]:
-            if visited[i] is False:
-                result[i] = now
-                q.append(i)
-                visited[i] = True
+def preorder(root):
+    print(root, end='')
+    if tree[root][0] != '.':
+        preorder(tree[root][0])
+    if tree[root][1] != '.':
+        preorder(tree[root][1])
 
-bfs(1)
-for i in range(2, N+1):
-    print(result[i])
+def inorder(root):
+    if tree[root][0] != '.':
+        inorder(tree[root][0])
+    print(root, end='')
+    if tree[root][1] != '.':
+        inorder(tree[root][1])
+
+
+def postorder(root):
+    if tree[root][0] != '.':
+        postorder(tree[root][0])
+    if tree[root][1] != '.':
+        postorder(tree[root][1])
+    print(root, end='')
+
+preorder('A')
+print()
+inorder('A')
+print()
+postorder('A')
