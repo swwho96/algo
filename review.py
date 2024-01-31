@@ -1,36 +1,51 @@
 import sys
 input = sys.stdin.readline
 
-N = int(input())
-tree = {}
-for _ in range(N):
-    n, l, r = input().split()
-    tree[n] = [l,r]
+N, M, K = map(int, input().split())
+tmp = N
+treesize = 0
+while tmp != 0:
+    tmp //= 2
+    treesize += 1
 
-def preorder(root):
-    print(root, end='')
-    if tree[root][0] != '.':
-        preorder(tree[root][0])
-    if tree[root][1] != '.':
-        preorder(tree[root][1])
+treesize = pow(2, treesize+1)
+leftstart = treesize // 2 - 1
+tree = [0] * (treesize+1)
 
-def inorder(root):
-    if tree[root][0] != '.':
-        inorder(tree[root][0])
-    print(root, end='')
-    if tree[root][1] != '.':
-        inorder(tree[root][1])
+for idx in range(leftstart+1, leftstart+N+1):
+    tree[idx] = int(input().rstrip())
 
+def initTree(i):
+    while i != 1:
+        tree[i//2] += tree[i]
+        i -= 1
 
-def postorder(root):
-    if tree[root][0] != '.':
-        postorder(tree[root][0])
-    if tree[root][1] != '.':
-        postorder(tree[root][1])
-    print(root, end='')
+initTree(treesize-1)
 
-preorder('A')
-print()
-inorder('A')
-print()
-postorder('A')
+def change(index, value):
+    diff = value-tree[index]
+    while index > 0:
+        tree[index] += diff
+        index = index // 2
+
+def getsum(s, e):
+    answer = 0
+    while s <= e:
+        if s % 2 == 1:
+            answer += tree[s]
+            s += 1
+        if e % 2 == 0:
+            answer += tree[e]
+            e -= 1
+        s //= 2
+        e //= 2
+    return answer
+
+for _ in range(M+K):
+    q, s, e = map(int, input().split())
+    if q == 1:
+        change(leftstart+s, e)
+    elif q == 2:
+        s += leftstart
+        e += leftstart
+        print(getsum(s,e))
