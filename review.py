@@ -1,17 +1,26 @@
 import sys
 input = sys.stdin.readline
 
-T = int(input())
-for _ in range(T):
-    K = int(input()) # 층
-    N = int(input()) # 호
-    apt = [[1] * (N+1) for _ in range(K+1)]
-    # 0층 i호는 i명 거주
-    for i in range(1, N+1):
-        apt[0][i] = i
-    # a층 b호는 a-1층 1호부터 b호까지의 총 인원
-    for a in range(1, K+1):
-        for b in range(2, N+1):
-            apt[a][b] = apt[a][b-1] + apt[a-1][b]
-    # K층 N호 인원
-    print(apt[K][N])
+N, M, K = map(int, input().split())
+dp = [[0 for j in range(202)] for i in range(202)]
+
+for i in range(202):
+    for j in range(0, i+1):
+        if i==0 or j==0:
+            dp[i][j] = 1
+        else:
+            dp[i][j] = dp[i-1][j] + dp[i-1][j-1]
+            if dp[i][j] > 1000000000:
+                dp[i][j] = 1000000001
+
+if dp[i+j][j] < K:
+    print(-1)
+else:
+    while not (N==0 and M==0):
+        if dp[N-1+M][M] >= K:
+            print('a', end='')
+            N -= 1
+        else:
+            print('z', end='')
+            K -= dp[N-1+M][M]
+            M -= 1
