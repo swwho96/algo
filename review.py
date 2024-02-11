@@ -1,26 +1,19 @@
 import sys
 input = sys.stdin.readline
 
-N, M, K = map(int, input().split())
-dp = [[0 for j in range(202)] for i in range(202)]
+N = int(input())
+days = [0] * (N+1)
+costs = [0] * (N+1)
+for i in range(1, N+1):
+    info = list(map(int, input().split()))
+    days[i] = info[0]
+    costs[i] = info[1]
 
-for i in range(202):
-    for j in range(0, i+1):
-        if i==0 or j==0:
-            dp[i][j] = 1
-        else:
-            dp[i][j] = dp[i-1][j] + dp[i-1][j-1]
-            if dp[i][j] > 1000000000:
-                dp[i][j] = 1000000001
+dp = [0] * (N+2)
+for i in range(N, 0, -1):
+    if i+days[i] > N+1:
+        dp[i] = dp[i+1]
+    else:
+        dp[i] = max(dp[i+1], dp[i+days[i]]+costs[i])
 
-if dp[i+j][j] < K:
-    print(-1)
-else:
-    while not (N==0 and M==0):
-        if dp[N-1+M][M] >= K:
-            print('a', end='')
-            N -= 1
-        else:
-            print('z', end='')
-            K -= dp[N-1+M][M]
-            M -= 1
+print(dp[1])
