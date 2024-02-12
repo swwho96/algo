@@ -1,19 +1,16 @@
 import sys
 input = sys.stdin.readline
 
+dp_0 = [0,0,1]
+dp_1 = [0,1,0]
+
 N = int(input())
-days = [0] * (N+1)
-costs = [0] * (N+1)
-for i in range(1, N+1):
-    info = list(map(int, input().split()))
-    days[i] = info[0]
-    costs[i] = info[1]
-
-dp = [0] * (N+2)
-for i in range(N, 0, -1):
-    if i+days[i] > N+1:
-        dp[i] = dp[i+1]
-    else:
-        dp[i] = max(dp[i+1], dp[i+days[i]]+costs[i])
-
-print(dp[1])
+if N <= 2:
+    print(dp_0[N]+dp_1[N])
+else:
+    for _ in range(N-2):
+        tmp_0 = dp_0[-1]+dp_1[-1]
+        tmp_1 = dp_0[-1]
+        dp_0.append(tmp_0)
+        dp_1.append(tmp_1)
+    print(dp_0[N]+dp_1[N])
