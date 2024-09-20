@@ -56,3 +56,53 @@ while 1:
     
 
 print(time)
+
+# ---------------------------------------------------------------------
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+# 외부에 노출된 치즈 찾기 -> DFS
+# 2변이상이 외부에 노출된 치즈 찾기
+# 녹는 치즈 0으로 처리
+
+def outer_cheese()->dict:
+    global board, N, M
+    cheese = {}
+    visited = [[False] * M for _ in range(N)]
+    visited[0][0] = True
+    q = deque([(0,0)])
+    while q:
+        r, c = q.popleft()
+        for nr, nc in [(r+1,c),(r-1,c),(r,c+1),(r,c-1)]:
+            if 0<=nr<N and 0<=nc<M and visited[nr][nc] is False:
+                if board[nr][nc] == 1:
+                    if (nr,nc) in cheese:
+                        cheese[(nr,nc)] += 1
+                    else: cheese[(nr,nc)] = 1
+                else:
+                    visited[nr][nc] = True
+                    q.append((nr, nc))
+    return cheese
+
+
+def melting()->None:
+    global board, cheese
+    for k, v in cheese.items():
+        if v >= 2:
+            board[k[0]][k[1]] = 0
+
+N, M = map(int, input().split())
+board = []
+for _ in range(N):
+    board.append(list(map(int, input().split())))
+
+time = 0
+while True:
+    cheese = outer_cheese()
+    if cheese == {}:
+        break
+    melting()
+    time += 1
+print(time)
