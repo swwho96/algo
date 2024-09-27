@@ -1,23 +1,55 @@
-import sys
-sys.setrecursionlimit(10**6)
-input = sys.stdin.readline
+# import sys
+# input = sys.stdin.readline
 
-N = int(input().rstrip())
-graph = [[] for _ in range(N+1)]
-tree = {i: {'child':[], 'parent':None} for i in range(1,N+1)}
-for _ in range(N-1):
-    u, v = map(int, input().split())
-    graph[u].append(v)
-    graph[v].append(u)
+# N = int(input().rstrip())
+# nodes = list(map(int, input().split()))
+# del_node = int(input().rstrip())
 
-def makeTree(cur:int, parent:int):
-    global tree
-    for node in graph[cur]:
-        if node != parent:
-            tree[cur]['child'].append(node)
-            tree[node]['parent'] = cur
-            makeTree(node, cur)
+# visited = [False] * N
+# graph = [[] for _ in range(N)]
+# for u, v in enumerate(nodes):
+#     if v == -1:
+#         root = u
+#     if v != -1:
+#         graph[u].append(v)
+#         graph[v].append(u)
 
-makeTree(1, -1)
-for i in range(2, N+1):
-    print(tree[i]['parent'])
+# if del_node == root:
+#     print(0)
+# else:
+#     visited[root] = True
+#     q = [root]
+#     answer = 0
+#     while q:
+#         cur = q.pop()
+#         leaf = True
+#         for node in graph[cur]:
+#             if node != del_node:
+#                 if visited[node] == False:
+#                     visited[node] = True
+#                     leaf = False
+#                     q.append(node)
+#         if leaf is True:
+#             answer += 1
+
+#     print(answer)
+
+
+def dfs(num, arr):
+    arr[num] = -2
+    for i in range(len(arr)):
+        if num == arr[i]:
+            dfs(i, arr)
+
+n = int(input())
+arr = list(map(int, input().split()))
+k = int(input())
+count = 0
+
+dfs(k, arr)
+print(arr)
+count = 0
+for i in range(len(arr)):
+    if arr[i] != -2 and i not in arr:
+        count += 1
+print(count)
