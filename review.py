@@ -1,55 +1,24 @@
-# import sys
-# input = sys.stdin.readline
+import sys
+input = sys.stdin.readline
 
-# N = int(input().rstrip())
-# nodes = list(map(int, input().split()))
-# del_node = int(input().rstrip())
-
-# visited = [False] * N
-# graph = [[] for _ in range(N)]
-# for u, v in enumerate(nodes):
-#     if v == -1:
-#         root = u
-#     if v != -1:
-#         graph[u].append(v)
-#         graph[v].append(u)
-
-# if del_node == root:
-#     print(0)
-# else:
-#     visited[root] = True
-#     q = [root]
-#     answer = 0
-#     while q:
-#         cur = q.pop()
-#         leaf = True
-#         for node in graph[cur]:
-#             if node != del_node:
-#                 if visited[node] == False:
-#                     visited[node] = True
-#                     leaf = False
-#                     q.append(node)
-#         if leaf is True:
-#             answer += 1
-
-#     print(answer)
+N, M = map(int, input().split())
+distances = [float('inf')] * (N+1)
+nodes = [tuple(map(int, input().split())) for _ in range(M)]
 
 
-def dfs(num, arr):
-    arr[num] = -2
-    for i in range(len(arr)):
-        if num == arr[i]:
-            dfs(i, arr)
+def bellman_ford(start):
+    distances[start] = 0
+    for v in range(N):
+        for s, e, c in nodes:
+            if distances[s] != float('inf') and distances[e] > distances[s] + c:
+                distances[e] = distances[s] + c
+                if v == N-1:
+                    return False
+    return True
 
-n = int(input())
-arr = list(map(int, input().split()))
-k = int(input())
-count = 0
 
-dfs(k, arr)
-print(arr)
-count = 0
-for i in range(len(arr)):
-    if arr[i] != -2 and i not in arr:
-        count += 1
-print(count)
+if bellman_ford(1) is True:
+    for i in range(2, N+1):
+        print(distances[i] if distances[i] != float('inf') else -1)
+else:
+    print(-1)
